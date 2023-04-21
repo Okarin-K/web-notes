@@ -1,17 +1,10 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
-import { UnValidateNote } from './models/unvalidateNote';
-import { createNote } from './services/noteService';
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
+import { api } from './route';
 
-const app = new Hono()
-app.get('/', (c) => c.text('Hello Hono!'))
+const app = new Hono();
 
-app.post('/notes', async (c) => {
-    const unValidateNote = await c.req.json<UnValidateNote>();
-
-    const ok = await createNote(unValidateNote);
-    return c.json({ok});
-});
+app.route('/api', api);
 
 app.onError((err, c) => {
     console.error(err);
@@ -21,4 +14,4 @@ app.onError((err, c) => {
 serve({
     fetch: app.fetch,
     port: 8787
-})
+});
