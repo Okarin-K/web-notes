@@ -18,7 +18,7 @@ const validateNote = (note: UnValidateNote): ValidatedNote => {
     }
 }
 
-export const create = async (note: UnValidateNote): Promise<number> => {
+export const createNote = async (note: UnValidateNote): Promise<number> => {
     const validatedNote = validateNote(note);
 
     // Save to database

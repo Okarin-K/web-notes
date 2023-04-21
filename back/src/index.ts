@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { UnValidateNote } from './models/unvalidateNote';
-import { create } from './services/noteService';
+import { createNote } from './services/noteService';
 
 const app = new Hono()
 app.get('/', (c) => c.text('Hello Hono!'))
@@ -9,7 +9,7 @@ app.get('/', (c) => c.text('Hello Hono!'))
 app.post('/notes', async (c) => {
     const unValidateNote = await c.req.json<UnValidateNote>();
 
-    const ok = await create(unValidateNote);
+    const ok = await createNote(unValidateNote);
     return c.json({ok});
 });
 
