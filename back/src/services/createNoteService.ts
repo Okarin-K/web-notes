@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { prisma } from "../lib/database/prisma";
 import { UnValidateNote } from "../models/unvalidateNote"
 import { ValidatedNote } from "../models/validatedNote"
 
@@ -21,8 +22,6 @@ const validateNote = (note: UnValidateNote): ValidatedNote => {
 
 export const createNote = async (note: UnValidateNote): Promise<number> => {
     const validatedNote = validateNote(note);
-
-    const prisma = new PrismaClient();
     const created = await prisma.notes.create({
         data: validatedNote
     })

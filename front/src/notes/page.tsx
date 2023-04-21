@@ -1,10 +1,37 @@
-import { Spinner } from "@chakra-ui/react";
-import { Suspense } from "react";
+import { API_URL } from "@/constants/api";
+import { Box, Grid, GridItem, Heading, Link, Spinner } from "@chakra-ui/react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { NoteList } from "./noteList";
-import { zNotes } from "./type";
+import { zNotes, Notes, Note } from "./type";
+
+type Props = {
+    notes: Notes
+}
 
 export default function Page() {
-    const notes = getNotes();
+    const [loading, setLoading] = useState(false);
+    const [notes, setNotes] = useState<Note[]>([]);
+
+    const getNotes = useCallback(async () => {
+        const res = await fetch('http://localhost:8787/api/notes', {
+            method: 'GET'
+        });
+        const notes = await res.json();
+        
+        return zNotes.parse(notes);
+    }, []);
+
+    useEffect(() => {
+        console.log('useEffect');
+
+        getNotes().then((notes) => {
+            console.log(notes);
+            setNotes(notes);
+            setLoading(true);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [getNotes, loading]);
 
     return (
         <main>
@@ -16,22 +43,15 @@ export default function Page() {
     )
 }
 
-export const getNotes = () => {
-    
-    return zNotes.parse([
-        {
-            id: "1",
-            title: "Note 1",
-            content: "Content 1",
-            createdAt: new Date().toLocaleString(),
-            updatedAt: new Date().toLocaleString(),
-        },
-        {
-            id: "2",
-            title: "Note 2",
-            content: "Content 2",
-            createdAt: new Date().toLocaleDateString(),
-            updatedAt: new Date().toLocaleDateString(),
-        },
-    ]);
+export async function getServerSideProps() {
+    const res = await fetch('http://localhost:8787/api/notes', {
+        method: 'GET'
+    });
+    const notes = await res.json();
+
+    return {
+        props: {
+            notes: zNotes.parse(notes)
+        }
+    }
 }

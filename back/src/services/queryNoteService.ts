@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/database/prisma';
 import { ReadNoteFromDB } from '../models/readNoteFromDB';
 import { ResponseNote } from '../models/responseNote';
 import { formatDate } from './formatDate';
 
 const convertToNote = (note: ReadNoteFromDB): ResponseNote => {
     return {
-        id: note.id,
+        id: note.id.toString(),
         title: note.title,
         content: note.content,
         createdAt: formatDate(note.createdAt),
@@ -14,7 +14,6 @@ const convertToNote = (note: ReadNoteFromDB): ResponseNote => {
 }
 
 export const listAll = async () => {
-    const prisma = new PrismaClient();
     const notes = await prisma.notes.findMany();
     return notes.map(convertToNote);
 }

@@ -1,5 +1,6 @@
 import { Box, Card, CardBody, CardHeader, Flex, Grid, GridItem, Heading } from "@chakra-ui/react";
 import Link from "next/link"
+import { useState } from "react";
 import useSWR from 'swr'
 import { Note, zNotes } from "./type";
 
@@ -7,22 +8,20 @@ type Props = {
   initialState: Note[]
 }
 
-const fetcher = (url: string) => fetch(url).then(async(res) => {
-  const data = await res.json();
-  const notes = zNotes.parse(data);
-  return notes;
-})
-
 type NoteProps = {
   item: Note;
 }
 
 export const NoteList: React.FC<Props> = ({initialState}) => {
-  const data = initialState
+  const [notes, setNotes] = useState<Note[]>(initialState);
+
+  if(!initialState) {
+    return <div>loading...</div>
+  }
 
   return (
     <Grid templateColumns='repeat(5, 1fr)' gap={6}>
-        {data.map((note) => (
+        {initialState.map((note) => (
           <NoteItem key={note.id} item={note} />
         ))}
     </Grid>

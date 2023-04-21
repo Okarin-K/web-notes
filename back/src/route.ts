@@ -6,7 +6,7 @@ import { listAll } from "./services/queryNoteService";
 
 export const api = new Hono();
 
-api.use('/post/*', cors())
+api.use('*', cors())
 api.get('/', (c) => c.text('Hello Hono!'));
 
 api.get('/notes', async (c) => {
