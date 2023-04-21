@@ -35,7 +35,7 @@ export default function Page() {
 
     return (
         <main>
-            <h1>List Notes</h1>
+            <Heading size='lg' color='gray.600'>List Notes</Heading>
             <Suspense fallback={<Spinner />}>
                 <NoteList initialState={notes} />
             </Suspense>

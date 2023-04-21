@@ -17,3 +17,17 @@ export const listAll = async () => {
     const notes = await prisma.notes.findMany();
     return notes.map(convertToNote);
 }
+
+export const findById = async (id: string) => {
+    const note = await prisma.notes.findUnique({
+        where: {
+            id: parseInt(id)
+        }
+    });
+
+    if(!note) {
+        throw new Error('Note not found')
+    };
+
+    return convertToNote(note);
+}
