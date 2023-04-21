@@ -23,6 +23,6 @@ api.get('/notes/:id', async (c) => {
 api.post('/notes', async (c) => {
     const unValidateNote = await c.req.json<UnValidateNote>();
 
-    const ok = await createNote(unValidateNote);
-    return c.json({ok});
+    const id = await createNote(unValidateNote);
+    return c.json(id);
 });

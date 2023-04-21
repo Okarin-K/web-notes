@@ -8,12 +8,12 @@ export const NewNote = () => {
     const router = useRouter();
     
     const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+    const [content, setContent] = useState('');
 
     const createNote = useCallback(async () => {
-        const res = await fetch('/api/notes', {
+        const res = await fetch('http://localhost:8787/api/notes', {
             method: 'POST',
-            body: JSON.stringify({ title, body }),
+            body: JSON.stringify({ title, content }),
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -24,15 +24,21 @@ export const NewNote = () => {
             return;
         }
 
-        const id = z.number().parse(res.json());
+        const json = await res.json();
+
+        console.log(json);
+
+        const id = z.number().parse(json);
         alert('Note created!!');
 
-        router.push('/notes/[id]', `/notes/${id}`);
-    }, [router, title, body]);
+        router.push( `/notes/[id]`, `/notes/${id}`);
+    }, [router, title, content]);
 
     return (
         <Box m={6}>
-            <Link href="/">← back</Link>
+            <Link href="/">
+                <Heading size='md' color='gray.600'>← back</Heading>
+            </Link>
             <Heading mt='4' color={'gray.600'} size={"sm"}>New Note</Heading>
             <Flex direction='column' background={'gray.100'} p={6}> 
                 <HStack mt={5}>
@@ -46,11 +52,11 @@ export const NewNote = () => {
                 </Box>
                 <Box mt='4' rounded='lg'>
                     <Text>Body</Text>
-                    <Textarea background='gray.50' textColor='gray.800' h={64} onChange={(e) => setBody(e.target.value)} />
+                    <Textarea background='gray.50' textColor='gray.800' h={64} onChange={(e) => setContent(e.target.value)} />
                 </Box>
                 <Box mt='4' rounded='lg'>
                     <Heading>Preview</Heading>
-                    <Content markdown={body} />
+                    <Content markdown={content} />
                 </Box>
             </Flex>
         </Box>

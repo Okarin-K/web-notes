@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { prisma } from "../lib/database/prisma";
 import { UnValidateNote } from "../models/unvalidateNote"
 import { ValidatedNote } from "../models/validatedNote"
